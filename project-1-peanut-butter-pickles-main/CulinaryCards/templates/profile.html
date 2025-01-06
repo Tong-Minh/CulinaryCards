@@ -1,0 +1,121 @@
+{% extends "boxTemplates.html" %}
+
+{% block extraHeadSpace %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profile.css') }}">
+    <script src="{{ url_for('static', filename='profile.js') }}"></script>
+{% endblock %}
+
+
+{% block middle %}
+
+<div id="pfpSelect">
+    <div id="pfpExit" onclick="pfpToggle()">x</div>  
+    <div id="imgPreviewSelect">
+        <input type="file" id="pfpInput" accept="image/*" onchange="setPfpPreview(this)" style="display: none;">
+        <label for="pfpInput" id="pfpLabel">
+            <img id="imgSelect" src="https://cdn-icons-png.flaticon.com/512/44/44289.png" alt="Select Image">
+        </label>
+    </div>
+    <div id="previewRight">
+        <h4 style="margin-bottom: 0;">Profile Picture Preview</h4>
+        <img id="pfpPreview" alt="Profile Picture Preview" class="pfp">
+        <button id="pfpSubmit" onclick="setPfp()">Update Profile Picture</button>
+    </div>  
+</div>
+<div id="pfpGrayBackground"></div>
+
+{%if isUser%}
+  <div>
+      <img id="accountGear" src="https://cdn-icons-png.flaticon.com/512/40/40031.png" alt="Account Settings">
+  </div>
+
+  <div id="accountSettings">
+      <h1>Delete Account</h1>
+      <h3>This action will delete your account from our databases.</h3>
+      <h3>Only proceed if you are sure you want to.</h3>
+      <button type="button" class="pure-button" id="deleteAccount" onclick="toggleDeletion()">Delete Account</button>
+      <div id="accountDeletionConfirmation" style="display: none;">
+          <h2>Are you sure you would like to delete your account?</h2>
+          <button type="button" class="pure-button" id="cancelDeletion" onclick="toggleDeletion()">No</button>
+          <button type="button" class="pure-button" id="confirmDeletion" onclick="deleteAccount()">Yes</button>
+      </div>
+  </div>
+{%endif%}
+
+<div id="profileContainerAll">
+
+    <div id="profileContainer" class="pure-g">
+        <div class="pure-u-1-4 profileInfo" id="profileInfo">
+            <div id="imgContainer">
+                <img id="pfp" src="/api/getprofilepicture/{{ profile }}" class="pfp">
+                {% if profile == session["user"] %}
+                    <img id="editProfile" src="https://cdn-icons-png.flaticon.com/512/1250/1250925.png" alt="Edit Profile" class="editPfp" onclick="toggleEdit(this)">
+                {% endif %}
+            </div>
+            <h1 id="username" class="username">{{user["username"]}}</h1>
+            <h5 id="bio" class="bio">{{user["bio"]}}</h5>
+            <div class="numberOfCluster">
+                <img src="https://cdn-icons-png.flaticon.com/512/1999/1999896.png" class="icon" alt="Spatula Icon">            
+                <h2 id="numberOfRecipes" class="numberOf">{{recipecount}}</h2>
+            </div>
+            <div class="numberOfCluster">
+                <img src="{{ url_for('static', filename='resources/likeheart.svg') }}" class="icon" alt="Heart Icon"
+                style="filter: brightness(0) saturate(100%) invert(43%) sepia(100%) saturate(746%) hue-rotate(356deg) brightness(100%) contrast(111%)">
+                <h2 id="numberOfLikes" class="numberOf">{{userlikes}}</h2>
+            </div>
+        </div>
+        <div class="pure-u-1-4" id="editProfileContainer">
+            <h1>Editing Your Profile:</h1>
+            <div>
+                <label for="editUsername">Username:</label>
+                <span id="usernameError" class="error" style="color: red; display: none;">Invalid/Taken Username</span>
+            </div>
+            <input type="text" id="editUsername" class="pure-input-1" placeholder="Username" maxlength="20">
+            <label for="editBio">Bio:</label>
+            <textarea id="editBio" class="pure-input-1" placeholder="Bio" maxlength="200"></textarea>
+            <div>
+                <button id="cancelEdit" class="pure-button cancel" onclick="toggleEdit(this)">Cancel</button>
+                <button id="submitEdit" class="pure-button submit" onclick="submitEdit(event)">Update Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="profileRecipeMenu">
+        <div id="profileMenu" class="pure-menu pure-menu-horizontal profileMenu">
+            <ul class="pure-menu-list" id="recipePagesContainer">
+                <li class="pure-menu-item recipePage" id="my">
+                    <a onclick="changeToMy()" class="pure-menu-link">{%if isUser%}My{%endif%} Recipes</a>
+                </li>
+                <li class="pure-menu-item recipePage" id="liked">
+                    <a onclick="changeToLiked()" class="pure-menu-link">Liked Recipes</a>
+                </li>
+                {% if session["user"] == profile %}
+                    <li class="pure-menu-item recipePage" id="saved">
+                        <a onclick="changeToSaved()" class="pure-menu-link">Saved Recipes</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>  
+    <div class="pure-g" id="profileRecipesContainer">
+        {% if session["user"] == profile %}
+            <a class="pure-u-1-5 createRecipeTile" id="createRecipe" href="/createRecipe">New Recipe</a>
+        {% endif %}
+        {% for recipe in recipes %}
+            <a class="pure-u-1-5 profileRecipe" data-id="{{recipe[0]}}" href="/recipe/{{recipe[0]}}" style="background-image: url(/api/getrecipeimage/{{recipe[0]}})">
+                <div id="{{recipe[0]}}">
+                    <h1 class="recipeTitle">{{recipe[1]}}</h1>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+    <script>
+        var userId = "{{ user.userid }}";
+        var username = "{{ user.username }}";
+        var bio = "{{ user.bio }}";
+    </script>
+
+{% endblock %}

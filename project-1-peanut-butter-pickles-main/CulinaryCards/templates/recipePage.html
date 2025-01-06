@@ -1,0 +1,111 @@
+{% extends "boxTemplates.html" %}
+
+{% block extraHeadSpace %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='recipePage.css') }}">
+    <script src="{{ url_for('static', filename='recipePage.js') }}"></script>
+{% endblock %}
+
+{% block middle %}
+
+<div class="pure-g pure-u-1" id="recipe-view-body">
+  <div class="pure-g pure-u-7-8" id="recipe-view-container">
+    <div class="pure-g pure-u-3-5" id="left-side">
+      <div class="pure-u-1" id="recipe-view-title">{{ recipe[1] }}
+        {% if session.get("user") and recipe[7] == session.get("user") %}
+          <a href="/createRecipe/{{recipe[0]}}">
+            <img id="editRecipe" src="https://cdn-icons-png.flaticon.com/512/1250/1250925.png" alt="Edit Recipe">
+          </a>
+        {% endif %}
+      </div>
+      <div id="recipe-view-post-details">
+        <div class="pure-u-1" id="recipe-view-author">Written by: <a class="profileTag" href="/profile?profile={{recipe[7]}}">{{ recipe[6] }}</a></div>
+        <div class="pure-u-1" id="recipe-view-date">Published: {{ time }}</div>
+      </div>
+
+      <div class="pure-u-5-8" id="recipe-view-img-container">
+        <img class="pure-img pure-u-1" id="recipe-view-img" src="{{recipe[9]}}">
+      </div>
+
+      <div class="pure-u-5-8" id="recipe-view-description">{{ recipe[2] }}</div>
+      <br/><br/>
+      <div class="pure-u-1" id="category-container">Categories: 
+        {% for info in recipe[8] %}
+          {{ info }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </div>
+      <div class="pure-g pure-u-1-2" id=""> 
+        <br/>
+        Ingredients:
+        <ul class="pure-g pure-u-1" id="ingredient-container" >
+          {% for info in recipe[3] %}
+          <li class="ingredients" id="item-{{ loop.index }}">
+            <input type="checkbox" class="" id="ingredient-{{ loop.index }}" />
+            <label for="ingredient-{{ loop.index }}">{{ info }}</label>
+          </li>
+          {% endfor %}
+        </ul>
+
+        Steps:
+        <ul class="pure-g pure-u-1" id="step-container" >
+          {% for info in recipe[4] %}
+            <li class="ingredients" id="instruction-{{ loop.index }}">
+              <input type="checkbox" class="" id="step-{{ loop.index }}" />
+              <label for="step-{{ loop.index }}">{{ loop.index}}. {{ info }}</label>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div> 
+
+    <div class="pure-g pure-u-3-8" id="right-side">
+      <div class="pure-g pure-u-1" id="likes-and-saves-container">
+        <div class="pure-g pure-u-3-24" id="likes-container">
+          <div class="pure-u-1" id="likes">{% if session.get("user") %}<a href="javascript:updateLiked({{recipe[0]}})" >{% endif %}<img id="likedICON" class="profile-icon" src="{{ url_for('static', filename='resources/likeheart.svg') }}"
+            style="filter: {% if likedstatus %}brightness(0) saturate(100%) invert(43%) sepia(100%) saturate(746%) hue-rotate(356deg) brightness(100%) contrast(111%);{% else %}invert(97%) sepia(2%) saturate(2146%) hue-rotate(326deg) brightness(85%) contrast(97%){% endif %};"></a></div>
+          <div class="pure-u-1" id="likes-count">{{likes}}</div>
+        </div>
+        <div class="pure-u-3-24" id="saves">{% if session.get("user") %}<a href="javascript:updateSaved({{recipe[0]}})" >{% endif %}<img id="savedICON" class="profile-icon" src="{{ url_for('static', filename='resources/save.svg') }}"
+          style="filter: {% if savedstatus %}brightness(0) saturate(100%) invert(43%) sepia(100%) saturate(746%) hue-rotate(356deg) brightness(100%) contrast(111%);{% else %}invert(97%) sepia(2%) saturate(2146%) hue-rotate(326deg) brightness(85%) contrast(97%){% endif %};"></a></div>
+      </div>
+
+      
+      <div class="pure-u-1 title" id="comment-section-title">Comment Section</div>
+      <div class="pure-g pure-u-1" id="comment-container">
+        {% for comment in comments %}
+          {% if session.get("user") == comment[4] %}
+            <div class="pure-g pure-u-1 comment" id="comment-with-button" commentid="{{ comment[0] }}">
+              <div class="pure-u-22-24"><a class="profileTag" href="/profile?profile={{comment[4]}}">{{ comment[3] }}:</a> {{ comment[2] }}</div>
+              <button class="pure-u-1-24 delete-btn" id="delete-button" type="button" commentid="{{ comment[0] }}" commentuserid="{{ comment[4] }}" onClick="deleteComment()" value="Delete">x</button>
+            </div>
+          {% else %}
+            <div class="pure-u-1 comment" id="" commentid="{{ comment[0] }}"><a class="profileTag" href="/profile?profile={{comment[4]}}">{{ comment[3] }}:</a> {{ comment[2] }}</div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="pure-u-1" id="hidden-recipe-id" style>{{ recipe[0] }}</div>
+      {% if session.get("user") %}
+        <textarea id="comment-box" name="comment" class="pure-g pure-u-1" rows="4" cols="50" placeholder="Write your comment here..." maxlength="254"></textarea>
+        <form id="comment-form">
+          <button class="pure-button" id="comment-btn" type="button" onClick="addComment()">Make a Comment</button>
+        </form>
+      {% endif %} 
+      
+    </div>
+  </div>
+
+  <!-- <div id="hidden-recipe-id">{{ recipe[0] }}</div>
+  {% if session.get("user") %}
+    <textarea id="comment-box" name="comment" class="pure-g pure-u-1-2" rows="4" cols="50" placeholder="Write your comment here..."></textarea>
+  {% endif %} -->
+
+
+  <div class="pure-g pure-u-1" id="search-result-btns">
+    <button class="pure-button" id="scroll-btn" type="button" onClick="history.back()">Back</button>
+    <!-- {% if session.get("user") %}
+      <form id="comment-form">
+        <button class="pure-button" id="scroll-btn" type="button" onClick="addComment()">Make a Comment</button>
+      </form>
+    {% endif %} -->
+  </div>
+</div>
+{% endblock %}
