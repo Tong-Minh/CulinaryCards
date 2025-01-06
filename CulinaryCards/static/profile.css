@@ -1,0 +1,356 @@
+:root {
+    --margins_sides: 15%;
+    --editProfileOpacity: 0;
+}
+
+body {
+    overflow-x: hidden;
+    height: 100vh;
+    background-color: white;
+}
+
+#profileContainerAll {
+    display: block;
+    margin-top: 15vh;
+}
+
+#accountSettings {
+    margin-top: 32vh;
+    font-size: 3vmin;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+#deleteAccount {
+    background-color: red;
+}
+
+#accountDeletionConfirmation {
+    font-size: 3vmin;
+    display: none;
+    padding: 5% 5% 5% 5%;
+    position: relative;
+    top: -200px;
+    margin-left: 20%;
+    margin-right: 20%;
+    z-index: 1001;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: -50vw;
+}
+
+#cancelDeletion:hover {
+    background-color: rgb(0,255,0,.2);
+}
+
+#confirmDeletion:hover {
+    background-color: rgb(255,0,0,.2);
+}
+
+#accountGear {
+    top: 12vh;
+    right: 3vw;
+    position: fixed;
+    width: 2%;
+    height: auto;
+    min-width: 20px;
+    z-index: 10000;
+    cursor: pointer;
+}
+
+#accountGear.spin {
+    animation: gearSpin 1.618s linear;
+}
+
+#accountGear.spinBack {
+    animation: gearSpinBack 1.618s linear;
+}
+
+@keyframes gearSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes gearSpinBack {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#profileContainer {
+    display: flex;
+    margin-bottom: 2vh;
+    justify-content: center;
+    align-items: center;
+}
+
+#editUsername {
+    width: 100%;
+}
+
+#editProfileContainer {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#editProfileContainer input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+#editProfileContainer button {
+    padding: 5px;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+}
+
+.profileInfo:hover {
+    --editProfileOpacity: 1;
+}
+
+#imgContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    gap: 8px;
+}
+
+#editProfile {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    top: 0;
+    right: -8px;
+    opacity: var(--editProfileOpacity);
+}
+
+#editProfile:hover {
+    cursor: pointer;
+}
+
+#pfpExit {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+}
+
+#pfpGrayBackground {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    overflow-y: hidden;
+}
+
+#pfpSelect {
+    display: none;
+    padding: 5% 5% 5% 5%;
+    background-color: white;
+    position: fixed;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 30%;
+    margin-right: 30%;
+    z-index: 1001;
+    border-radius: 10px;
+
+    grid-template-columns: 50% 50%;
+    grid-template-areas: 
+        "Select Submit"
+}
+
+#previewRight{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-area: Submit;
+    justify-content: space-between;
+}
+
+#pvpPreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 5vmax;
+    grid-area: pfpPreview;
+}
+
+#imgSelect {
+    grid-area: imgSelect;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+}
+
+#pfpSubmit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: pfpSubmit;
+}
+
+.username {
+    font-size: clamp(1.5em, 3vmin, 3em);
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+.bio {
+    font-size: clamp( .8em, 2vmin, 1.5em);
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+}
+
+.numberOfCluster {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+.numberOf {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+@media only screen and (max-width: 766px) {
+
+}
+
+@media only screen and (min-width: 766px) {
+
+}
+
+.profileRecipeMenu {
+    margin-left: var(--margins_sides);
+    margin-right: var(--margins_sides);
+    margin-top: 10vh;
+    display: flex;
+    background-color: antiquewhite;
+    cursor: pointer
+}
+
+#profileMenu {
+    margin: 0;
+    text-align: center;
+}
+
+@media only screen and (max-width: 766px) {
+    #profileMenu {
+        font-size: 1em;
+    }
+}
+
+@media only screen and (max-width: 516px) {
+    #profileMenu {
+        font-size: .75em;
+        width: 100%;
+    }
+
+    .profileRecipeMenu {
+        width: 100%;
+        margin: 0;
+    }
+
+}
+
+.recipePage.selected {
+    font-weight: bold;
+}
+
+#sortContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 8px;
+    flex-grow: 1;
+    padding: .5em 1em;
+}
+
+#sortContainer label {
+    margin-right: 8px;
+}
+
+#sortProfileRecipes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+#profileRecipesContainer {
+    margin-top: 8px;
+    gap: 8px;
+    justify-content: center;
+    margin-left: var(--margins_sides);
+    margin-right: var(--margins_sides);
+    margin-bottom: 10vh;
+}
+
+.profileRecipe {
+    aspect-ratio: 3 / 2;
+    border: 2px solid black;
+    transition: box-shadow 0.4s ease;
+    background-size: cover;
+}
+
+.recipeTitle {
+    font-size: 3vh;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.profileRecipe:hover {
+    box-shadow: 2px -2px 4px #e37851;
+}
+
+.createRecipeTile {
+    aspect-ratio: 3 / 2;
+    border: 2px solid black;
+    font-size: 3vh;
+    text-align: center;
+    align-content: center;
+    transition: background-color 0.4s ease;
+}
+
+.createRecipeTile:hover {
+    background-color: #e37851;
+}
